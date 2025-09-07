@@ -1,0 +1,113 @@
+// Common ListNode class for all LinkedList problems
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int x) { val = x; }
+}
+
+// Problem 1: Insertion Sort List
+class InsertionSortList {
+    public ListNode insertionSortList(ListNode head) {
+        if (head == null) return null;
+        ListNode dummy = new ListNode(0);
+        ListNode curr = head;
+        while (curr != null) {
+            ListNode prev = dummy;
+            while (prev.next != null && prev.next.val < curr.val) {
+                prev = prev.next;
+            }
+            ListNode next = curr.next;
+            curr.next = prev.next;
+            prev.next = curr;
+            curr = next;
+        }
+        return dummy.next;
+    }
+}
+
+// Problem 2: Swap Nodes in Pairs
+class SwapNodesInPairs {
+    public ListNode swapPairs(ListNode head) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode prev = dummy;
+        while (head != null && head.next != null) {
+            ListNode first = head;
+            ListNode second = head.next;
+            prev.next = second;
+            first.next = second.next;
+            second.next = first;
+            prev = first;
+            head = first.next;
+        }
+        return dummy.next;
+    }
+}
+
+// Problem 3: Linked List Cycle II
+class LinkedListCycleII {
+    public ListNode detectCycle(ListNode head) {
+        if (head == null || head.next == null) return null;
+        ListNode slow = head, fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast) {
+                ListNode entry = head;
+                while (entry != slow) {
+                    entry = entry.next;
+                    slow = slow.next;
+                }
+                return entry;
+            }
+        }
+        return null;
+    }
+}
+
+// Main class to test all Day 4 problems
+public class Day4Problems {
+    public static void main(String[] args) {
+        // Example usage:
+
+        // 1. Insertion Sort List
+        ListNode head1 = new ListNode(4);
+        head1.next = new ListNode(2);
+        head1.next.next = new ListNode(1);
+        head1.next.next.next = new ListNode(3);
+        InsertionSortList sorter = new InsertionSortList();
+        ListNode sorted = sorter.insertionSortList(head1);
+        System.out.print("Insertion Sort List: ");
+        printList(sorted);
+
+        // 2. Swap Nodes in Pairs
+        ListNode head2 = new ListNode(1);
+        head2.next = new ListNode(2);
+        head2.next.next = new ListNode(3);
+        head2.next.next.next = new ListNode(4);
+        SwapNodesInPairs swapper = new SwapNodesInPairs();
+        ListNode swapped = swapper.swapPairs(head2);
+        System.out.print("Swap Nodes in Pairs: ");
+        printList(swapped);
+
+        // 3. Linked List Cycle II
+        ListNode head3 = new ListNode(3);
+        head3.next = new ListNode(2);
+        head3.next.next = new ListNode(0);
+        head3.next.next.next = new ListNode(-4);
+        head3.next.next.next.next = head3.next; // create cycle
+        LinkedListCycleII cycleFinder = new LinkedListCycleII();
+        ListNode cycleNode = cycleFinder.detectCycle(head3);
+        System.out.println("Linked List Cycle II: " +
+            (cycleNode != null ? "Cycle starts at node " + cycleNode.val : "No cycle"));
+    }
+
+    // Utility to print linked list
+    public static void printList(ListNode head) {
+        while (head != null) {
+            System.out.print(head.val + " ");
+            head = head.next;
+        }
+        System.out.println();
+    }
+}
